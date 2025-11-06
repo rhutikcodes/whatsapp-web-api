@@ -64,7 +64,7 @@ app.onError((err, c) => {
 });
 
 // Start server
-const port = parseInt(process.env.PORT || '3000');
+const port = parseInt(process.env.PORT || '21465');
 
 console.log(`
 ╔════════════════════════════════════════════╗

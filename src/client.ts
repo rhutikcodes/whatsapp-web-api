@@ -1,5 +1,6 @@
 import { Client, LocalAuth, MessageMedia } from 'whatsapp-web.js';
 import QRCode from 'qrcode';
+import { existsSync } from 'fs';
 import { QRCodeState, WAState } from './types';
 
 /**
@@ -14,6 +15,43 @@ class WhatsAppClientManager {
 
   constructor() {
     this.initializeClient();
+  }
+
+  /**
+   * Get Chrome executable path based on environment or OS
+   */
+  private getChromePath(): string {
+    // Priority 1: Environment variable
+    if (process.env.CHROME_PATH) {
+      console.log(`Using Chrome from env: ${process.env.CHROME_PATH}`);
+      return process.env.CHROME_PATH;
+    }
+
+    // Priority 2: Check common Linux paths (Docker/VPS)
+    const linuxPaths = [
+      '/usr/bin/google-chrome',
+      '/usr/bin/google-chrome-stable',
+      '/usr/bin/chromium-browser',
+      '/usr/bin/chromium',
+    ];
+
+    for (const path of linuxPaths) {
+      if (existsSync(path)) {
+        console.log(`Using Chrome from: ${path}`);
+        return path;
+      }
+    }
+
+    // Priority 3: macOS path (for local development)
+    const macPath = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
+    if (existsSync(macPath)) {
+      console.log(`Using Chrome from macOS: ${macPath}`);
+      return macPath;
+    }
+
+    // Default fallback
+    console.log('Using default Chrome path');
+    return '/usr/bin/google-chrome';
   }
 
   /**
@@ -35,7 +73,7 @@ class WhatsAppClientManager {
       }),
       puppeteer: {
         headless: true,
-        executablePath: '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+        executablePath: this.getChromePath(),
         args: [
           '--no-sandbox',
           '--disable-setuid-sandbox',

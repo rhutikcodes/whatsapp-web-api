@@ -21,8 +21,7 @@
     "hono": "^4.0.0",
     "@hono/node-server": "^1.13.7",
     "whatsapp-web.js": "^1.26.0",
-    "qrcode": "^1.5.4",
-    "puppeteer": "^18.2.1"
+    "qrcode": "^1.5.4"
   },
   "devDependencies": {
     "@types/node": "^22.10.5",
