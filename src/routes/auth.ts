@@ -46,9 +46,12 @@ authRoutes.get('/qr', async (c) => {
     }
 
     // Return PNG image
-    c.header('Content-Type', 'image/png');
-    c.header('Cache-Control', 'no-cache, no-store, must-revalidate');
-    return c.body(qrImage);
+    return new Response(qrImage, {
+      headers: {
+        'Content-Type': 'image/png',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+      },
+    });
   } catch (error) {
     console.error('Error getting QR code:', error);
     return c.json(
